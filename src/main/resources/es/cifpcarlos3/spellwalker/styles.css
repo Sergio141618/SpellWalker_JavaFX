@@ -1,0 +1,35 @@
+.root {
+    -fx-background-color: #0B0F2A;
+}
+
+#tabla {
+    -fx-background-color: #4D2A7F;
+}
+
+.texto{
+    -fx-fill: #CCCCCC;
+    -fx-font-size: 16px;
+}
+
+.tex{
+    -fx-fill: #CCCCCC;
+    -fx-font-size: 20px;
+}
+
+.titulo {
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+
+
+}
+
+.botones {
+    -fx-background-color: #ffffff;
+    -fx-fill: #000000;
+    -fx-font-size: 20px;
+}
+
+.botones:hover {
+    -fx-background-color: linear-gradient(to right, #ff4da6, #a64dff);
+}
