@@ -1,6 +1,8 @@
 module es.cifpcarlos3.spellwalker {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.base;
+    requires javafx.graphics;
 
 
     opens es.cifpcarlos3.spellwalker to javafx.fxml;

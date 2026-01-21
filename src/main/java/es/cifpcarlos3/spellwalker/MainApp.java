@@ -15,6 +15,7 @@ public class MainApp extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Iniciar sesión en MainApp");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 
