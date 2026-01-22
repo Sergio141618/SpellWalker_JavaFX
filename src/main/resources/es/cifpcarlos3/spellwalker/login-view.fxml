@@ -37,7 +37,6 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <!-- Nueva fila para "Crear usuario" -->
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
 
@@ -73,7 +72,6 @@
                     </GridPane.margin>
                 </Button>
 
-                <!-- NUEVO BOTÓN: CREAR USUARIO -->
                 <Button fx:id="btnCrearUsuario" mnemonicParsing="false" onAction="#handlerCrearUsuario" prefHeight="30.0" prefWidth="400.0" styleClass="botones" text="Crear usuario" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
                     <GridPane.margin>
                         <Insets bottom="10.0" />

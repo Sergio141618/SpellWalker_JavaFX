@@ -1,0 +1,72 @@
+.root {
+    -fx-font-family: 'Poppins', sans-serif;
+
+    -fx-background-color: linear-gradient(to bottom right,
+    #ffffff 65%,
+    #f0d0ed 70%,
+    #f698e8 75%,
+    #f0aae4 80%,
+    #b000a7 85%,
+    #72b9f5 95%,
+    #fd914e 100%
+    );
+}
+
+#authContainer {
+    -fx-background-color: rgba(255, 255, 255, 0.75);
+    -fx-padding: 40;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0.3, 0, 0);
+}
+
+.titulo {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+/* LABELS MÁS GRANDES */
+.labelForm {
+    -fx-text-fill: #555;
+    -fx-font-size: 18px;
+}
+
+/* CAMPOS MÁS GRANDES */
+.campo {
+    -fx-background-color: white;
+    -fx-padding: 12;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-size: 16px;
+}
+
+.campo:focused {
+    -fx-border-color: #72b9f5;
+    -fx-effect: dropshadow(gaussian, rgba(114,185,245,0.3), 8, 0.2, 0, 0);
+}
+
+.botonPrincipal {
+    -fx-background-color: linear-gradient(to right, #72b9f5, #b000a7);
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: 600;
+    -fx-padding: 14 20;
+    -fx-background-radius: 6;
+}
+
+.botonPrincipal:hover {
+    -fx-translate-y: -2;
+    -fx-effect: dropshadow(gaussian, rgba(176,0,167,0.3), 10, 0.3, 0, 0);
+}
+
+.enlace {
+    -fx-text-fill: #b000a7;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+}
+
+.enlace:hover {
+    -fx-text-fill: #72b9f5;
+    -fx-underline: true;
+}
+

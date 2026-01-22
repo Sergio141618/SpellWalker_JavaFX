@@ -55,7 +55,8 @@ public class MainAppController implements Initializable {
             stage.setMaximized(true);
             stage.show();
 
-            CrearPersonajeController controller = loader.getController();
+            Stage stage1 = (Stage) campoUsuario.getScene().getWindow();
+            stage1.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,13 +66,16 @@ public class MainAppController implements Initializable {
     @FXML
     public void handlerCrearUsuario(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("crear_usuario-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("registro-view.fxml"));
             Scene scene = new Scene(loader.load());
 
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.setMaximized(true);
             stage.show();
+
+            Stage stage1 = (Stage) campoUsuario.getScene().getWindow();
+            stage1.close();
 
         } catch (IOException e) {
             e.printStackTrace();
