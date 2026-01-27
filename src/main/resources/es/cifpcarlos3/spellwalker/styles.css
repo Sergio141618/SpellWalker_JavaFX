@@ -1,9 +1,19 @@
 .root {
-    -fx-background-color: #0B0F2A;
+    -fx-font-family: 'Poppins', sans-serif;
+
+    -fx-background-color: linear-gradient(to bottom right,
+    #ffffff 65%,
+    #f0d0ed 70%,
+    #f698e8 75%,
+    #f0aae4 80%,
+    #b000a7 85%,
+    #72b9f5 95%,
+    #fd914e 100%
+    );
 }
 
 #tabla {
-    -fx-background-color: #4D2A7F;
+    -fx-background-color: #b000a7;
 }
 
 .texto{
