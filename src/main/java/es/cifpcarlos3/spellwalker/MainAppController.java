@@ -23,6 +23,9 @@ public class MainAppController implements Initializable {
     @FXML
     private PasswordField campoContrasena;
 
+    private Validar valido = new Validar();
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,16 +38,30 @@ public class MainAppController implements Initializable {
 
     @FXML
     public void handlerAcceder(ActionEvent event) {
-        String login = campoUsuario.getText().trim();
-        String password = campoContrasena.getText().trim();
+        String usuario = campoUsuario.getText().trim();
+        String contrasena = campoContrasena.getText().trim();
 
-        if (login.equals("admin") && password.equals("1234")) {
-            crearPersonaje();
-        } else {
-            campoUsuario.setStyle("-fx-border-color: red;");
-            campoContrasena.setStyle("-fx-border-color: red;");
+        try {
+            if (valido.comprobacion(usuario, contrasena)) {
+                crearPersonaje();
+            }else {
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                alerta.setTitle("Error");
+                marcarError();
+                alerta.showAndWait();
+
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
     }
+
+    private void marcarError() {
+        campoUsuario.setStyle("-fx-border-color: red;");
+        campoContrasena.setStyle("-fx-border-color: red;");
+    }
+
     private void crearPersonaje() {
         try {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("crear_personaje-view.fxml"));
