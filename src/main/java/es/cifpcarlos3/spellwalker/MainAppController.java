@@ -23,17 +23,10 @@ public class MainAppController implements Initializable {
     @FXML
     private PasswordField campoContrasena;
 
-    private Validar valido = new Validar();
-
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    }
-
-    @FXML
-    public void handlerCerrarAplicacion(ActionEvent actionEvent) {
-        System.exit(0);
     }
 
     @FXML
@@ -42,15 +35,7 @@ public class MainAppController implements Initializable {
         String contrasena = campoContrasena.getText().trim();
 
         try {
-            if (valido.comprobacion(usuario, contrasena)) {
-                crearPersonaje();
-            }else {
-                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-                alerta.setTitle("Error");
-                marcarError();
-                alerta.showAndWait();
-
-            }
+           crearPersonaje();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

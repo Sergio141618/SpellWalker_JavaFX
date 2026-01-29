@@ -7,20 +7,22 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="500.0" prefWidth="900.0" stylesheets="@register.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.cifpcarlos3.spellwalker.RegistroController">
+<VBox alignment="CENTER" prefHeight="500.0" prefWidth="900.0" stylesheets="@register.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.cifpcarlos3.spellwalker.RegistroController">
 
     <children>
 
-        <VBox fx:id="authContainer" alignment="CENTER" layoutX="873.0" layoutY="33.0" maxHeight="1.7976931348623157E308" prefHeight="980.0" prefWidth="497.0" spacing="20.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="700.0" AnchorPane.rightAnchor="700.0" AnchorPane.topAnchor="60.0">
+        <VBox fx:id="authContainer" alignment="CENTER" maxWidth="500.0" spacing="20.0">
+            <VBox.margin>
+                <Insets bottom="60.0" top="60.0" />
+            </VBox.margin>
 
             <Text styleClass="titulo" text="Crear cuenta en Spellwalker" textAlignment="CENTER" wrappingWidth="302.6689453125">
             <VBox.margin>
-               <Insets bottom="50.0" />
+               <Insets bottom="30.0" />
             </VBox.margin></Text>
 
             <VBox alignment="CENTER_LEFT" maxWidth="350" spacing="12">
@@ -44,7 +46,7 @@
 
             </VBox>
 
-            <Button fx:id="btnCrearCuenta" maxWidth="350" onAction="#handlerLogin" styleClass="botonPrincipal" text="Crear cuenta" />
+            <Button fx:id="btnCrearCuenta" maxWidth="350" onAction="#handlerCrearCuenta" styleClass="botonPrincipal" text="Crear cuenta" />
 
             <Hyperlink onAction="#handlerLogin" styleClass="enlace" text="¿Ya tienes una cuenta? Inicia sesión" />
 
@@ -52,4 +54,4 @@
 
     </children>
 
-</AnchorPane>
+</VBox>
