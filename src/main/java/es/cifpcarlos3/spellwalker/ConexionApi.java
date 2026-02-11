@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Base64;
 
 public class ConexionApi {
@@ -92,6 +93,19 @@ public class ConexionApi {
             if (token != null) System.out.println("JWT expired? " + isJwtExpired(token.trim()));
             String resp = postToTurso(payload);
             System.out.println("Respuesta: " + resp);
+
+            System.out.println("=== PRUEBA DE REGISTRO ===");
+
+
+            boolean resultado = registerPerfil(
+                    "Lala",
+                    "1234",
+                    "usuarioPr@gmail.com"
+            );
+
+            System.out.println("Resultado del registro: " + resultado);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,6 +122,126 @@ public class ConexionApi {
             connection.setRequestProperty("Accept", "application/json");
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static String generarHash(String usuario, String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA1");
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(usuario);
+            sb.append(password);
+
+            md.update(sb.toString().getBytes());
+            byte[] pass = md.digest();
+
+            Base64.Encoder encoder = Base64.getEncoder();
+            return encoder.encodeToString(pass);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean usuarioExiste(String username) {
+        try {
+            String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT NOMBRE_USUARIO FROM PERFIL WHERE NOMBRE_USUARIO = ?",
+                "args": ["%s"]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(username);
+
+            String resp = postToTurso(payload);
+
+            return resp.contains("\"rows\":[[");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean mailExiste(String mail) {
+        try {
+            String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT MAIL FROM PERFIL WHERE MAIL = ?",
+                "args": ["%s"]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(mail);
+
+            String resp = postToTurso(payload);
+
+            return resp.contains("\"rows\":[[");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+    public static boolean registerPerfil(String username, String password, String mail) {
+        try {
+            if (usuarioExiste(username)) {
+                System.out.println("El usuario ya existe");
+                return false;
+            }
+
+            if (mailExiste(mail)) {
+                System.out.println("El correo ya está registrado");
+                return false;
+            }
+
+            String hash = generarHash(username, password);
+
+            String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "INSERT INTO PERFIL (NOMBRE_USUARIO, CONTRASENYA, MAIL, NOTIFICACIONES) VALUES (?, ?, ?, true)",
+                "args": ["%s", "%s", "%s"]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(username, hash, mail);
+
+            String resp = postToTurso(payload);
+
+            if (resp.contains("error")) {
+                System.out.println("Error al registrar usuario");
+                return false;
+            }
+
+            System.out.println("Usuario registrado correctamente");
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
