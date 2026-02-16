@@ -1,5 +1,6 @@
 package es.cifpcarlos3.spellwalker;
 
+import es.cifpcarlos3.spellwalker.RegistroController;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -20,8 +21,6 @@ public class ConexionApi {
         }
         token = token.trim();
 
-        // Depuración: imprime longitud y primeros/últimos caracteres (sin mostrar el
-        // token completo)
         System.out.println("Token length: " + token.length());
         System.out.println("Token start: " + token.substring(0, Math.min(8, token.length())));
         System.out.println("Token end: " + token.substring(Math.max(0, token.length() - 8)));
@@ -69,15 +68,13 @@ public class ConexionApi {
         }
     }
 
-    // Utilidad opcional: comprobar formato JWT y expiración (solo para depuración
-    // local)
+
     public static boolean isJwtExpired(String jwt) {
         try {
             String[] parts = jwt.split("\\.");
             if (parts.length < 2)
                 return true;
             String payloadJson = new String(Base64.getUrlDecoder().decode(parts[1]), StandardCharsets.UTF_8);
-            // Busca "exp": número (simple parse)
             int idx = payloadJson.indexOf("\"exp\"");
             if (idx == -1)
                 return false;
@@ -91,7 +88,6 @@ public class ConexionApi {
         }
     }
 
-    // Ejemplo de uso
     public static void main(String[] args) {
         String payload = "{\"requests\":[{\"type\":\"execute\",\"stmt\":{\"sql\":\"SELECT 1\"}},{\"type\":\"close\"}]}";
         try {
@@ -104,7 +100,7 @@ public class ConexionApi {
             System.out.println("=== PRUEBA DE REGISTRO ===");
 
             boolean resultado = registerPerfil(
-                    "Yakuza",
+                    "usuario",
                     "ororororo",
                     "ororororo@gmail.com");
 
