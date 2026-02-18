@@ -272,4 +272,225 @@ public class ConexionApi {
             return false;
         }
     }
+
+    public static int obtenersiguienteIdCampaña() throws IOException {
+
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT MAX(ID_CAMPAÑA) + 1 FROM CAMPAÑA"
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """;
+
+        String resp = postToTurso(payload);
+
+        return extraerNumero(resp);
+    }
+
+    public static int extraerNumero(String json) {
+        try {
+            int start = json.indexOf("[[") + 2;
+            int end = json.indexOf("]]");
+
+            return Integer.parseInt(json.substring(start, end));
+
+        } catch (Exception e) {
+            return 1;
+        }
+    }
+
+    public static int obtenersiguienteIdPersonaje() throws IOException {
+
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT MAX(PERSONAJE_ID) + 1 FROM PERSONAJE"
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """;
+
+        String resp = postToTurso(payload);
+
+        return extraerNumero(resp);
+    }
+
+    public static int obtenerIdEscuelaPorNombre(String nombreEscuela) throws IOException {
+
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT ID_ESCUELA FROM ESCUELA WHERE NOMBRE_ESCUELA = ?",
+                "args": ["%s"]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(nombreEscuela);
+
+        String resp = postToTurso(payload);
+
+        return extraerNumero(resp);
+    }
+
+    public static int obtenerIdSpellPorNombre(String nombreSpell) throws IOException {
+
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT ID_SPELL FROM SPELLS WHERE NOMBRE_SPELL = ?",
+                "args": ["%s"]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(nombreSpell);
+
+        String resp = postToTurso(payload);
+
+        return extraerNumero(resp);
+    }
+
+    public static int obtenerIdPersonajePorNombre(String nombrePersonaje) throws IOException {
+
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT PERSONAJE_ID FROM PERSONAJE WHERE NOMBRE_PERSONAJE = ?",
+                "args": ["%s"]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(nombrePersonaje);
+
+        String resp = postToTurso(payload);
+
+        return extraerNumero(resp);
+    }
+
+    public static boolean insertarSpellAPersonaje(String nombrePersonaje, String nombreSpell) throws IOException {
+
+        int idPersonaje = obtenerIdPersonajePorNombre(nombrePersonaje);
+        if (idPersonaje == -1) {
+            System.out.println("No existe el personaje: " + nombrePersonaje);
+            return false;
+        }
+
+        int idSpell = obtenerIdSpellPorNombre(nombreSpell);
+        if (idSpell == -1) {
+            System.out.println("No existe el spell: " + nombreSpell);
+            return false;
+        }
+
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "INSERT INTO PERSONAJE_SPELLS (ID_SPELL, ID_PERS) VALUES (?, ?)",
+                "args": [%d, %d]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(idSpell, idPersonaje);
+
+        postToTurso(payload);
+
+        return true;
+    }
+    public static int obtenerIdCampañaPorNombre(String nombreCampaña) throws IOException {
+
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT ID_CAMPAÑA FROM CAMPAÑA WHERE NOMBRE = ?",
+                "args": ["%s"]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(nombreCampaña);
+
+        String resp = postToTurso(payload);
+
+        return extraerNumero(resp);
+    }
+
+
+    public static boolean crearPersonajeConNombreYCampaña(String nombrePersonaje, String nombreCampaña, String perfil) {
+
+        try {
+            int idCampaña = obtenerIdCampañaPorNombre(nombreCampaña);
+
+            if (idCampaña == -1) {
+                System.out.println("La campaña '" + nombreCampaña + "' no existe. Debe crearse antes.");
+                return false;
+            }
+
+            int nuevoIdPersonaje = obtenersiguienteIdPersonaje();
+
+            String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "INSERT INTO PERSONAJE (PERSONAJE_ID, NOMBRE_PERSONAJE, ID_CAMPAÑA, PERSONAJE_PERFIL) VALUES (?, ?, ?, ?)",
+                "args": [%d, "%s", %d, "%s"]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(nuevoIdPersonaje, nombrePersonaje, idCampaña, perfil);
+
+            postToTurso(payload);
+
+            System.out.println("Personaje creado correctamente con ID: " + nuevoIdPersonaje);
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+
+
+
+
 }
