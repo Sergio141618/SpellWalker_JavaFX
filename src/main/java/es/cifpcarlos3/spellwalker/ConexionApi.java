@@ -172,6 +172,33 @@ public class ConexionApi {
         }
     }
 
+    public static boolean contrasenaExiste(String password) {
+        try {
+            String payload = """
+                    {
+                      "requests": [
+                        {
+                          "type": "execute",
+                          "stmt": {
+                            "sql": "SELECT CONTRASENYA FROM PERFIL WHERE CONTRASENYA = ?",
+                            "args": ["%s"]
+                          }
+                        },
+                        { "type": "close" }
+                      ]
+                    }
+                    """.formatted(password);
+
+            String resp = postToTurso(payload);
+
+            return resp.contains("\"rows\":[[");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean mailExiste(String mail) {
         try {
             String payload = """

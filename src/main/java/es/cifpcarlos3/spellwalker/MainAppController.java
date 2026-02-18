@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import es.cifpcarlos3.spellwalker.ConexionApi;
 
 public class MainAppController implements Initializable {
 
@@ -33,11 +34,14 @@ public class MainAppController implements Initializable {
     public void handlerAcceder(ActionEvent event) {
         String usuario = campoUsuario.getText().trim();
         String contrasena = campoContrasena.getText().trim();
+        if (ConexionApi.usuarioExiste(usuario) &&ConexionApi.contrasenaExiste(ConexionApi.generarHash(usuario, contrasena))){
 
-        try {
-           crearPersonaje();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        }
+        else {
+            Alert alertContrasena = new Alert(Alert.AlertType.ERROR);
+            alertContrasena.setTitle("Error");
+            alertContrasena.setContentText("La contraseña introducida no es valida");
+            alertContrasena.showAndWait();
         }
 
     }
