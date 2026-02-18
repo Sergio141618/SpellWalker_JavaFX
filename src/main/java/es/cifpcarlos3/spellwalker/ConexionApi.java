@@ -486,6 +486,30 @@ public class ConexionApi {
             return false;
         }
     }
+    public static int crearCampaña(String nombreCampaña) throws IOException {
+
+        int nuevoId = obtenersiguienteIdCampaña();
+
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "INSERT INTO CAMPAÑA (ID_CAMPAÑA, NOMBRE) VALUES (?, ?)",
+                "args": [%d, "%s"]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(nuevoId, nombreCampaña);
+
+        postToTurso(payload);
+
+        return nuevoId;
+    }
+
 
 
 
