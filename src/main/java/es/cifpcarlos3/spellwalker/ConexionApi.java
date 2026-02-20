@@ -531,7 +531,6 @@ public class ConexionApi {
 
             String resp = postToTurso(payload);
 
-            // Si hay filas, el login es correcto
             return resp.contains("\"rows\":[[");
 
         } catch (Exception e) {
