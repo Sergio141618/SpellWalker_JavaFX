@@ -510,11 +510,34 @@ public class ConexionApi {
         return nuevoId;
     }
 
+    public static boolean login(String username, String password) {
+        try {
+            String hash = generarHash(username, password);
 
+            String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT NOMBRE_USUARIO FROM PERFIL WHERE NOMBRE_USUARIO = ? AND CONTRASENYA = ?",
+                "args": ["%s", "%s"]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(username, hash);
 
+            String resp = postToTurso(payload);
 
+            // Si hay filas, el login es correcto
+            return resp.contains("\"rows\":[[");
 
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }
