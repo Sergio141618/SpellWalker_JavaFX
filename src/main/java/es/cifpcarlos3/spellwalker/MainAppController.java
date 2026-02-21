@@ -34,7 +34,22 @@ public class MainAppController implements Initializable {
     public void handlerAcceder(ActionEvent event) {
         String usuario = campoUsuario.getText().trim();
         String contrasena = campoContrasena.getText().trim();
-        if (ConexionApi.usuarioExiste(usuario) &&ConexionApi.contrasenaExiste(ConexionApi.generarHash(usuario, contrasena))){
+        if (ConexionApi.login(usuario, contrasena)){
+            try {
+                FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("crear_personaje-view.fxml"));
+                Scene scene = new Scene(loader.load());
+
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.setMaximized(true);
+                stage.show();
+
+                Stage stage1 = (Stage) campoUsuario.getScene().getWindow();
+                stage1.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
         else {
