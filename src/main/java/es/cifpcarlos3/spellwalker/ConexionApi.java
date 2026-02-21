@@ -290,7 +290,7 @@ public class ConexionApi {
         }
     }
 
-    public static int obtenersiguienteIdCampaña() throws IOException {
+    public static int obtenersiguienteIdCampana() throws IOException {
 
         String payload = """
         {
@@ -443,7 +443,7 @@ public class ConexionApi {
 
         return true;
     }
-    public static int obtenerIdCampañaPorNombre(String nombreCampaña) throws IOException {
+    public static int obtenerIdCampanaPorNombre(String nombreCampana) throws IOException {
 
         String payload = """
         {
@@ -458,7 +458,7 @@ public class ConexionApi {
             { "type": "close" }
           ]
         }
-        """.formatted(nombreCampaña);
+        """.formatted(nombreCampana);
 
         String resp = postToTurso(payload);
 
@@ -466,13 +466,13 @@ public class ConexionApi {
     }
 
 
-    public static boolean crearPersonajeConNombreYCampaña(String nombrePersonaje, String nombreCampaña, String perfil) {
+    public static boolean crearPersonajeConNombreYCampana(String nombrePersonaje, String nombreCampana, String perfil) {
 
         try {
-            int idCampaña = obtenerIdCampañaPorNombre(nombreCampaña);
+            int idCampana = obtenerIdCampanaPorNombre(nombreCampana);
 
-            if (idCampaña == -1) {
-                System.out.println("La campaña '" + nombreCampaña + "' no existe. Debe crearse antes.");
+            if (idCampana == -1) {
+                System.out.println("La campaña '" + nombreCampana + "' no existe. Debe crearse antes.");
                 return false;
             }
 
@@ -491,7 +491,7 @@ public class ConexionApi {
             { "type": "close" }
           ]
         }
-        """.formatted(nuevoIdPersonaje, nombrePersonaje, idCampaña, perfil);
+        """.formatted(nuevoIdPersonaje, nombrePersonaje, idCampana, perfil);
 
             postToTurso(payload);
 
@@ -503,9 +503,9 @@ public class ConexionApi {
             return false;
         }
     }
-    public static int crearCampaña(String nombreCampaña) throws IOException {
+    public static int crearCampana(String nombreCampana) throws IOException {
 
-        int nuevoId = obtenersiguienteIdCampaña();
+        int nuevoId = obtenersiguienteIdCampana();
 
         String payload = """
         {
@@ -520,7 +520,7 @@ public class ConexionApi {
             { "type": "close" }
           ]
         }
-        """.formatted(nuevoId, nombreCampaña);
+        """.formatted(nuevoId, nombreCampana);
 
         postToTurso(payload);
 
