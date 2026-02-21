@@ -98,13 +98,24 @@ public class ConexionApi {
             System.out.println("Respuesta: " + resp);
 
             System.out.println("=== PRUEBA DE REGISTRO ===");
+            String usurname = "Prueba23";
+            String password = "Tata";
 
             boolean resultado = registerPerfil(
-                    "usuario",
-                    "ororororo",
-                    "ororororo@gmail.com");
+                    usurname,
+                    password,
+                    "prueba23Tata@gmail.com");
 
             System.out.println("Resultado del registro: " + resultado);
+
+            boolean ok = login(usurname, password);
+
+            if (ok) {
+                System.out.println("Login correcto");
+            } else {
+                System.out.println("Usuario o contraseña incorrectos");
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -246,14 +257,20 @@ public class ConexionApi {
                         {
                           "type": "execute",
                           "stmt": {
-                            "sql": "INSERT INTO PERFIL (NOMBRE_USUARIO, CONTRASENYA, MAIL, NOTIFICACIONES) VALUES ('%s', '%s', '%s', 1)"
+                            "sql": "INSERT INTO PERFIL (NOMBRE_USUARIO, CONTRASENYA, MAIL, NOTIFICACIONES) VALUES (?, ?, ?, 1)",
+                            "args": [
+                              { "type": "text", "value": "%s" },
+                              { "type": "text", "value": "%s" },
+                              { "type": "text", "value": "%s" }
+                            ]
                           }
                         },
                         { "type": "close" }
                       ]
                     }
-                    """
-                    .formatted(username, hash, mail);
+                    """.formatted(username, hash, mail);
+
+
 
             System.out.println("Payload enviado: " + payload);
             String resp = postToTurso(payload);
@@ -515,19 +532,23 @@ public class ConexionApi {
             String hash = generarHash(username, password);
 
             String payload = """
-        {
-          "requests": [
             {
-              "type": "execute",
-              "stmt": {
-                "sql": "SELECT NOMBRE_USUARIO FROM PERFIL WHERE NOMBRE_USUARIO = ? AND CONTRASENYA = ?",
-                "args": ["%s", "%s"]
-              }
-            },
-            { "type": "close" }
-          ]
-        }
-        """.formatted(username, hash);
+              "requests": [
+                {
+                  "type": "execute",
+                  "stmt": {
+                    "sql": "SELECT NOMBRE_USUARIO FROM PERFIL WHERE NOMBRE_USUARIO = ? AND CONTRASENYA = ?",
+                    "args": [
+                      { "type": "text", "value": "%s" },
+                      { "type": "text", "value": "%s" }
+                    ]
+                  }
+                },
+                { "type": "close" }
+              ]
+            }
+            """.formatted(username, hash);
+
 
             String resp = postToTurso(payload);
 
