@@ -580,6 +580,25 @@ public class ConexionApi {
         return extraerNombresDeJson(resp);
     }
 
+    public static java.util.List<String> obtenerTodasLasEscuelas() throws IOException {
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT NOMBRE FROM ESCUELAS"
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """;
+
+        String resp = postToTurso(payload);
+        return extraerNombresDeJson(resp);
+    }
+
     private static List<String> extraerNombresDeJson(String json) {
         List<String> nombres = new ArrayList<>();
         try {
