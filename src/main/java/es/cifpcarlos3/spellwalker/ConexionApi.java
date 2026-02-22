@@ -8,7 +8,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 public class ConexionApi {
 
@@ -343,29 +345,6 @@ public class ConexionApi {
 
         return extraerNumero(resp);
     }
-
-    public static int obtenerIdEscuelaPorNombre(String nombreEscuela) throws IOException {
-
-        String payload = """
-        {
-          "requests": [
-            {
-              "type": "execute",
-              "stmt": {
-                "sql": "SELECT ID_ESCUELA FROM ESCUELA WHERE NOMBRE_ESCUELA = ?",
-                "args": ["%s"]
-              }
-            },
-            { "type": "close" }
-          ]
-        }
-        """.formatted(nombreEscuela);
-
-        String resp = postToTurso(payload);
-
-        return extraerNumero(resp);
-    }
-
     public static int obtenerIdSpellPorNombre(String nombreSpell) throws IOException {
 
         String payload = """
@@ -558,6 +537,93 @@ public class ConexionApi {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static int obtenerIdEscuelaPorNombre(String nombreEscuela) throws IOException {
+
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT ID_ESCUELA FROM ESCUELA WHERE NOMBRE_ESCUELA = ?",
+                "args": [{"type": "text", "value": "%s"}]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(nombreEscuela);
+
+        String resp = postToTurso(payload);
+
+        return extraerNumero(resp);
+    }
+
+    public static List<String> obtenerTodasLasCampanas() throws IOException {
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT NOMBRE FROM CAMPAÑA"
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """;
+
+        String resp = postToTurso(payload);
+        return extraerNombresDeJson(resp);
+    }
+
+    private static List<String> extraerNombresDeJson(String json) {
+        List<String> nombres = new ArrayList<>();
+        try {
+            int rowsIndex = json.indexOf("\"rows\":[");
+            if (rowsIndex == -1)
+                return nombres;
+
+            String rowsContent = json.substring(rowsIndex + 8);
+
+            String[] parts = rowsContent.split("\\],\\[");
+            for (String part : parts) {
+                int valueIndex = part.indexOf("\"value\":\"");
+                if (valueIndex != -1) {
+                    int startQuote = valueIndex + 9;
+                    int nextQuote = part.indexOf("\"", startQuote);
+                    if (nextQuote != -1) {
+                        nombres.add(part.substring(startQuote, nextQuote));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return nombres;
+    }
+
+    public static boolean vincularPersonajeAEscuela(int idPersonaje, int idEscuela) throws IOException {
+        String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "INSERT INTO PERSONAJE_ESCUELAS (ID_PERSONAJE, ID_ESCUELA) VALUES (?, ?)",
+                "args": [{"type": "integer", "value": "%d"}, {"type": "integer", "value": "%d"}]
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """.formatted(idPersonaje, idEscuela);
+
+        String resp = postToTurso(payload);
+        return !resp.contains("error");
     }
 
 }
