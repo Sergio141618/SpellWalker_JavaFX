@@ -8,13 +8,10 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="es.cifpcarlos3.spellwalker.PersonajesGuardadosController">
 
-    <!-- TÍTULO -->
     <top>
         <Label text="Personajes del Usuario"
                style="-fx-font-size: 24px; -fx-padding: 20px; -fx-font-weight: bold;" />
     </top>
-
-    <!-- TABLA -->
     <center>
         <TableView fx:id="tablaPersonajes" prefHeight="500" prefWidth="900">
             <columns>
@@ -30,8 +27,6 @@
             </columns>
         </TableView>
     </center>
-
-    <!-- BOTÓN VOLVER -->
     <bottom>
         <HBox alignment="center" spacing="10">
             <padding>
