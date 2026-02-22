@@ -84,8 +84,22 @@ public class CrearPersonajeController implements Initializable {
     }
 
     @FXML
-    public void handlerCerrarAplicacion(ActionEvent actionEvent) {
-        System.exit(0);
+    public void handlerCerrarSesion(ActionEvent actionEvent) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(MainApp.class.getResource("login-view.fxml"));
+            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load());
+
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setScene(scene);
+            stage.setMaximized(true);
+            stage.show();
+
+            javafx.stage.Stage currentStage = (javafx.stage.Stage) campoNombre.getScene().getWindow();
+            currentStage.close();
+
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
