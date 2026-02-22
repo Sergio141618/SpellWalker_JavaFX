@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="es.cifpcarlos3.spellwalker.PersonajesGuardadosController">
+
+    <!-- TÍTULO -->
+    <top>
+        <Label text="Personajes del Usuario"
+               style="-fx-font-size: 24px; -fx-padding: 20px; -fx-font-weight: bold;" />
+    </top>
+
+    <!-- TABLA -->
+    <center>
+        <TableView fx:id="tablaPersonajes" prefHeight="500" prefWidth="900">
+            <columns>
+
+                <TableColumn fx:id="colNombre" text="Personaje" prefWidth="200"/>
+
+                <TableColumn fx:id="colCampana" text="Campaña" prefWidth="200"/>
+
+                <TableColumn fx:id="colEscuela" text="Escuela" prefWidth="150"/>
+
+                <TableColumn fx:id="colSpells" text="Hechizos" prefWidth="350"/>
+
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- BOTÓN VOLVER -->
+    <bottom>
+        <HBox alignment="center" spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Button text="Volver"  style="-fx-padding: 10px 20px;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
