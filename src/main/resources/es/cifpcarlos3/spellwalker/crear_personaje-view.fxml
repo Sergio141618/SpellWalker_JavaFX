@@ -56,7 +56,7 @@
             <HBox alignment="CENTER" layoutY="-98.0" prefHeight="178.0" prefWidth="1764.0" spacing="40" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-98.0">
    
 
-                <Button prefHeight="80.0" prefWidth="300.0" text="Personajes guardados" styleClass="tertiary-button">
+                <Button prefHeight="80.0" onAction="#handlerPersonajesGuardados" prefWidth="300.0" text="Personajes guardados" styleClass="tertiary-button">
                     <font>
                         <Font size="24.0" />
                     </font>

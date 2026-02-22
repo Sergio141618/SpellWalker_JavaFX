@@ -6,8 +6,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainApp extends Application {
+    public static Map<String, Object> usuario = new HashMap<>();
+
     @Override
     public void start(Stage stage) throws IOException {
 

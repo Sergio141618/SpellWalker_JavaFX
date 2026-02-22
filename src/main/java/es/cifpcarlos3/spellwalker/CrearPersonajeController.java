@@ -2,10 +2,13 @@ package es.cifpcarlos3.spellwalker;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.List;
@@ -50,9 +53,9 @@ public class CrearPersonajeController implements Initializable {
             return;
         }
 
-        String perfilUsuario = "Admin1234";
+        String usuarioActual = (String) MainApp.usuario.get("usuario");
 
-        boolean creado = ConexionApi.crearPersonajeConNombreYCampana(nombrePersonaje, nombreCampana, perfilUsuario);
+        boolean creado = ConexionApi.crearPersonajeConNombreYCampana(nombrePersonaje, nombreCampana, usuarioActual);
 
         if (creado) {
             try {
@@ -86,15 +89,35 @@ public class CrearPersonajeController implements Initializable {
     @FXML
     public void handlerCerrarSesion(ActionEvent actionEvent) {
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(MainApp.class.getResource("login-view.fxml"));
-            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load());
+            MainApp.usuario.clear();
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("login-view.fxml"));
+            Scene scene = new Scene(loader.load());
 
-            javafx.stage.Stage stage = new javafx.stage.Stage();
+            Stage stage = new Stage();
             stage.setScene(scene);
             stage.setMaximized(true);
             stage.show();
 
-            javafx.stage.Stage currentStage = (javafx.stage.Stage) campoNombre.getScene().getWindow();
+            Stage currentStage = (Stage) campoNombre.getScene().getWindow();
+            currentStage.close();
+
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handlerPersonajesGuardados(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("personajes_guardados.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setMaximized(true);
+            stage.show();
+
+            Stage currentStage = (Stage) campoNombre.getScene().getWindow();
             currentStage.close();
 
         } catch (java.io.IOException e) {

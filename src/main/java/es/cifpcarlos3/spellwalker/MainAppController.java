@@ -36,6 +36,7 @@ public class MainAppController implements Initializable {
         String contrasena = campoContrasena.getText().trim();
         if (ConexionApi.login(usuario, contrasena)){
             try {
+                MainApp.usuario.put("usuario", usuario);
                 FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("crear_personaje-view.fxml"));
                 Scene scene = new Scene(loader.load());
 
