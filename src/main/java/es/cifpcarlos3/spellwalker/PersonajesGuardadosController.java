@@ -1,10 +1,14 @@
 package es.cifpcarlos3.spellwalker;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.List;
@@ -52,24 +56,20 @@ public class PersonajesGuardadosController implements Initializable {
             }
             for (PersonajesId p : personajesId) {
 
-                // Nombre campaña
                 String nombreCampana = ConexionApi.obtenerNombreCampanaPorId(
                         Integer.parseInt(p.getIdCampana())
                 );
 
-                // Escuela
                 int idEscuela = ConexionApi.obtenerIdEscuelaDePersonaje(
                         Integer.parseInt(p.getId())
                 );
                 String nombreEscuela = ConexionApi.obtenerNombreEscuelaPorId(idEscuela);
 
-                // Spells
                 List<String> spells = ConexionApi.obtenerSpellsDePersonaje(
                         Integer.parseInt(p.getId())
                 );
                 String spellsTexto = String.join(", ", spells);
 
-                // Añadir a la tabla
                 tablaPersonajes.getItems().add(
                         new Personaje(
                                 p.getNombre(),
@@ -80,6 +80,23 @@ public class PersonajesGuardadosController implements Initializable {
                 );
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handlerVolver(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("crear_personaje-view.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setMaximized(true);
+            stage.show();
+
+            Stage currentStage = (Stage) tablaPersonajes.getScene().getWindow();
+            currentStage.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

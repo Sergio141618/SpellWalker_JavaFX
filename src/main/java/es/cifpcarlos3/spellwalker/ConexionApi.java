@@ -96,24 +96,6 @@ public class ConexionApi {
 
       System.out.println("=== PRUEBA DE REGISTRO ===");
       String usurname = "Prueba23";
-      /*
-       * String password = "Tata";
-       * 
-       * boolean resultado = registerPerfil(
-       * usurname,
-       * password,
-       * "prueba23Tata@gmail.com");
-       * 
-       * System.out.println("Resultado del registro: " + resultado);
-       * 
-       * boolean ok = login(usurname, password);
-       * 
-       * if (ok) {
-       * System.out.println("Login correcto");
-       * } else {
-       * System.out.println("Usuario o contraseña incorrectos");
-       * }
-       */
 
       crearPersonajeConNombreYCampana("Prueba", "TEST", usurname);
       debugPersonajes();
@@ -312,18 +294,25 @@ public class ConexionApi {
 
   public static int extraerNumero(String json) {
     try {
-      int valueIdx = json.indexOf("\"value\":");
-      if (valueIdx == -1)
-        return -1;
+      int valueIdx = json.indexOf("\"value\":\"");
+      int start;
+      if (valueIdx != -1) {
+        start = valueIdx + 9;
+      } else {
+        valueIdx = json.indexOf("\"value\":");
+        if (valueIdx == -1)
+          return -1;
+        start = valueIdx + 8;
+      }
 
-      int start = valueIdx + 8;
       int end = json.indexOf("}", start);
       if (end == -1)
+        end = json.indexOf("]", start);
+      if (end == -1)
         return -1;
-
+ // he tenido que cambiar el index, srry
       String valStr = json.substring(start, end).replace("\"", "").trim();
       return Integer.parseInt(valStr);
-
     } catch (Exception e) {
       return -1;
     }
@@ -358,7 +347,7 @@ public class ConexionApi {
             {
               "type": "execute",
               "stmt": {
-                "sql": "SELECT ID_SPELL FROM SPELLS WHERE NOMBRE_SPELL = ?",
+                "sql": "SELECT ID_SPELL FROM SPELLS WHERE NOMBRE = ?",
                 "args": [{"type": "text", "value": "%s"}]
               }
             },
@@ -415,16 +404,17 @@ public class ConexionApi {
               "type": "execute",
               "stmt": {
                 "sql": "INSERT INTO PERSONAJE_SPELLS (ID_SPELL, ID_PERS) VALUES (?, ?)",
-                "args": [{"type": "integer", "value": "%d"}, {"type": "integer", "value": "%d"}]
+                "args": [{"type": "integer", "value": "%s"}, {"type": "integer", "value": "%s"}]
               }
             },
             { "type": "close" }
           ]
         }
-        """.formatted(idSpell, idPersonaje);
+        """.formatted(String.valueOf(idSpell), String.valueOf(idPersonaje));
 
-    postToTurso(payload);
-    return true;
+    String resp = postToTurso(payload);
+    System.out.println("INSERT SPELL RESP: " + resp);
+    return !resp.contains("\"type\":\"error\"");
   }
 
   public static int obtenerIdCampanaPorNombre(String nombreCampana) throws IOException {
@@ -786,6 +776,25 @@ public class ConexionApi {
     String resp = postToTurso(payload);
 
     return extraerNumero(resp);
+  }
+
+  public static List<String> obtenerTodosNombresHechizos() throws IOException {
+    String payload = """
+        {
+          "requests": [
+            {
+              "type": "execute",
+              "stmt": {
+                "sql": "SELECT NOMBRE FROM SPELLS"
+              }
+            },
+            { "type": "close" }
+          ]
+        }
+        """;
+
+    String resp = postToTurso(payload);
+    return extraerNombresDeJson(resp);
   }
 
   public static String obtenerNombreEscuelaPorId(int idEscuela) throws IOException {

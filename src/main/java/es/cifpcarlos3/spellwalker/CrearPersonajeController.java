@@ -25,6 +25,12 @@ public class CrearPersonajeController implements Initializable {
     @FXML
     private ComboBox<String> comboEscuela;
 
+    @FXML
+    private ComboBox<String> comboSpell1;
+
+    @FXML
+    private ComboBox<String> comboSpell2;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -33,6 +39,10 @@ public class CrearPersonajeController implements Initializable {
 
             List<String> campanas = ConexionApi.obtenerTodasLasCampanas();
             comboCampana.getItems().addAll(campanas);
+
+            List<String> hechizos = ConexionApi.obtenerTodosNombresHechizos();
+            comboSpell1.getItems().addAll(hechizos);
+            comboSpell2.getItems().addAll(hechizos);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,8 +54,11 @@ public class CrearPersonajeController implements Initializable {
         String nombrePersonaje = campoNombre.getText();
         String nombreCampana = comboCampana.getValue();
         String nombreEscuela = comboEscuela.getValue();
+        String spell1 = comboSpell1.getValue();
+        String spell2 = comboSpell2.getValue();
 
-        if (nombrePersonaje == null || nombrePersonaje.isBlank() || nombreCampana == null || nombreEscuela == null) {
+        if (nombrePersonaje == null || nombrePersonaje.isBlank() || nombreCampana == null || nombreEscuela == null
+                || spell1 == null || spell2 == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText("Por favor, rellena todos los campos.");
@@ -64,15 +77,27 @@ public class CrearPersonajeController implements Initializable {
 
                 if (idPersonaje != -1 && idEscuela != -1) {
                     boolean vinculado = ConexionApi.vincularPersonajeAEscuela(idPersonaje, idEscuela);
-                    if (vinculado) {
+
+                    boolean spell1Ins = ConexionApi.insertarSpellAPersonaje(nombrePersonaje, spell1);
+                    boolean spell2Ins = ConexionApi.insertarSpellAPersonaje(nombrePersonaje, spell2);
+
+                    if (vinculado && spell1Ins && spell2Ins) {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Éxito");
-                        alert.setContentText("Personaje creado y vinculado a la escuela correctamente.");
+                        alert.setContentText("Personaje creado, vinculado a la escuela y hechizos asignados.");
                         alert.showAndWait();
 
                         campoNombre.clear();
                         comboCampana.getSelectionModel().clearSelection();
                         comboEscuela.getSelectionModel().clearSelection();
+                        comboSpell1.getSelectionModel().clearSelection();
+                        comboSpell2.getSelectionModel().clearSelection();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Aviso");
+                        alert.setContentText(
+                                "El personaje se creó, pero hubo un error al vincular la escuela o los hechizos.");
+                        alert.showAndWait();
                     }
                 }
             } catch (Exception e) {
